@@ -21,7 +21,7 @@
                                                      (persistent-flag? state side card :triggers-twice))))))
                            :msg "gain [Click]" :effect (effect (gain :runner :click 1))}}}
 
-   "Aesops Pawnshop"
+   "Aesop's Pawnshop"
    {:flags {:runner-phase-12 (req (>= 2 (count (all-installed state :runner))))}
     :abilities [{:msg (msg "trash " (:title target) " and gain 3 [Credits]")
                  :choices {:req #(and (= (:side %) "Runner") (:installed %))}
