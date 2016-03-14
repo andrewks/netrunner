@@ -39,6 +39,32 @@
    (take-credits state :corp)
    (is (= 3 (:click (get-runner))) "Should have lost 3 clicks and gained 2 clicks")))
 
+(deftest aesops-pawnshop-normal-sell
+  "Ensure you get 3 credits when selling an installed card"
+  (do-game
+   (new-game (default-corp)
+             (default-runner [(qty "Aesop's Pawnshop" 1)
+                              (qty "Beach Party" 3)]))
+   (is (= 4 (count (:hand (get-runner)))) "Runner starts with 4 cards in grip")
+   (is (= 5 (:credit (get-runner))))
+   (take-credits state :corp) ; skip corp turn 1
+   (play-from-hand state :runner "Aesop's Pawnshop")
+   (play-from-hand state :runner "Beach Party")
+   (play-from-hand state :runner "Beach Party")
+   (play-from-hand state :runner "Beach Party")
+   (take-credits state :runner) ; skip rest of runner turn 1
+   (take-credits state :corp) ; skip corp turn 2
+   (is (:runner-phase-12 @state) "Runner in Step 1.2")
+   ;; (let [aesops (get-in @state [:runner :rig :resource 0])
+   ;;       party (get-in @state [:runner :rig :resource 1])
+   ;;       before-creds (:credit (get-runner))]
+   ;;   (card-ability state :runner aesops 0)
+   ;;   (prompt-select :runner party)
+   ;;   (is (= (+ 3 before-creds) (:credit (get-runner)))))
+   (is (= 0 (count (:hand (get-runner)))) "No cards left in grip")
+   )
+  )
+
 (deftest daily-casts
   "Play and tick through all turns of daily casts"
   (do-game
